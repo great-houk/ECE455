@@ -4,4 +4,4 @@
 !**/
 
 # Ignore output files
-*.output
+# *.output
