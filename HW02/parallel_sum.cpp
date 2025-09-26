@@ -10,7 +10,7 @@ void sum(const std::vector<int>& data,
 		 size_t start,
 		 size_t end,
 		 long long& out) {
-	out = std::accumulate(data.begin() + start, data.begin() + end, 0);
+	out = std::accumulate(data.begin() + start, data.begin() + end, 0LL);
 }
 
 int main() {
@@ -30,29 +30,29 @@ int main() {
 
 	// Parallel
 	std::vector<std::thread> threads;
-	std::vector<long long> results(SEGS);
 	threads.reserve(SEGS);
+	std::vector<long long> results(SEGS, 0);
 	size_t start = 0;
 
 	auto p0 = std::chrono::high_resolution_clock::now();
 	for (int i = 0; i < SEGS - 1; i++) {
-		int end = start + AMT / SEGS;
-		threads.emplace_back(sum, std::cref(data), start, start + end,
+		size_t end = start + AMT / SEGS;
+		threads.emplace_back(sum, std::cref(data), start, end,
 							 std::ref(results[i]));
 		start = end;
 	}
 	threads.emplace_back(sum, std::cref(data), start, AMT,
 						 std::ref(results[SEGS - 1]));
-	std::for_each(threads.begin(), threads.end(), std::thread::join);
+	std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
 	auto total = std::accumulate(results.begin(), results.end(), 0LL);
 	auto p1 = std::chrono::high_resolution_clock::now();
 
 	// Printout
-	std ::chrono ::duration<double> t_base = s1 - s0;
-	std ::chrono ::duration<double> t_par = p1 - p0;
-	std ::cout << " Baseline sum : " << baseline << " Time : " << t_base.count()
-			   << " s \ n ";
-	std ::cout << " Parallel sum : " << total << " Time : " << t_par.count()
-			   << " s \ n ";
+	std::chrono::duration<double> t_base = s1 - s0;
+	std::chrono::duration<double> t_par = p1 - p0;
+	std::cout << "Baseline sum: " << baseline << " Time: " << t_base.count()
+			  << " s" << std::endl;
+	std::cout << "Parallel sum: " << total << " Time: " << t_par.count() << " s"
+			  << std::endl;
 	return 0;
 }

@@ -14,6 +14,6 @@ int main() {
 	for (int i = 0; i < N; i++)
 		threads.emplace_back(hello, i, N);
 
-	std::for_each(threads.begin(), threads.end(), std::thread::join);
+	std::for_each(threads.begin(), threads.end(), [](auto& t) { t.join(); });
 	return 0;
 }

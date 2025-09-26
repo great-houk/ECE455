@@ -1,0 +1,3 @@
+[No Lock] Final Counter: 25600000 (Expected: 25600000), Time: 0.0146119 seconds
+[With Mutex] Final Counter: 25600000 (Expected: 25600000), Time: 1.63794 seconds
+[With Atomic] Final Counter: 25600000 (Expected: 25600000), Time: 0.557757 seconds
