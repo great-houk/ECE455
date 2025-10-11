@@ -34,7 +34,7 @@ int main() {
 
 	vector_add<<<blocksPerGrid, threadsPerBlock>>>(d_A, d_B, d_C, N);
 
-	cudaMemcpy(h_CHere is a corrected version of your code with proper spacing and formatting:
+	cudaMemcpy(h_C, d_C, size, cudaMemcpyDeviceToHost);
 	printf("C[0] = %f\n", h_C[0]);
 	cudaFree(d_A);
 	cudaFree(d_B);

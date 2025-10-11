@@ -62,6 +62,9 @@
 		"xtr1common": "cpp",
 		"xutility": "cpp",
 		"mutex": "cpp",
-		"queue": "cpp"
+		"queue": "cpp",
+		"deque": "cpp",
+		"list": "cpp",
+		"xhash": "cpp"
 	}
 }
