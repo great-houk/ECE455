@@ -1,3 +1,10 @@
+#include <iostream>
+#include <cuda_runtime.h>
+#include <cassert>
+#include "helpers.cuh"
+
+extern size_t MAT_DIM;
+
 int main() {
 	const size_t num_tests = 2;	 // Correctness trials
 	assert(random_multiple_test_mm_cuda<int32_t>(num_tests));
@@ -6,8 +13,8 @@ int main() {
 	std::cout << "All tests passed!\n";
 
 	// --- Performance measurement ---
-	const size_t num_measurement_tests = 2;
-	const size_t num_measurement_warmups = 1;
+	const size_t num_measurement_tests = 100;
+	const size_t num_measurement_warmups = 10;
 	size_t m = MAT_DIM, n = MAT_DIM, p = MAT_DIM;
 
 	// Measure average latency across data types

@@ -21,6 +21,8 @@ __global__ void mm_kernel(T const* mat_1,
 	mat_3[i * p + j] = acc_sum;	 // Write result
 }
 
-#include "helpers.cu"
+size_t MAT_DIM = 128;
 
-#include "main.cu"
+#include "helpers.cuh"
+
+#include "main.cuh"

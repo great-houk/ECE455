@@ -15,7 +15,8 @@ __global__ void mm_kernel(T const* mat_1,
 
 	// Compute dot product of row i (A) and column j (B)
 	T acc_sum = 0;
-	for (size_t k = 0; k + 3 < n; k += 4) {
+	size_t k;
+	for (k = 0; k + 3 < n; k += 4) {
 		acc_sum += mat_1[i * n + (k + 0)] * mat_2[(k + 0) * p + j];
 		acc_sum += mat_1[i * n + (k + 1)] * mat_2[(k + 1) * p + j];
 		acc_sum += mat_1[i * n + (k + 2)] * mat_2[(k + 2) * p + j];
@@ -28,6 +29,8 @@ __global__ void mm_kernel(T const* mat_1,
 	mat_3[i * p + j] = acc_sum;	 // Write result
 }
 
-#include "helpers.cu"
+size_t MAT_DIM = 128;
 
-#include "main.cu"
+#include "helpers.cuh"
+
+#include "main.cuh"

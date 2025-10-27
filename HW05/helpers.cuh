@@ -1,3 +1,27 @@
+#ifndef HELPERS
+#define HELPERS
+
+#include <iostream>
+#include <cuda_runtime.h>
+#include <vector>
+#include <random>
+
+template <typename T>
+void mm_cuda(T const* mat_1,
+			 T const* mat_2,
+			 T* mat_3,
+			 size_t m,
+			 size_t n,
+			 size_t p) {
+	// Configure block and grid
+	const dim3 blockDim(16, 16);  // 16x16 threads per block
+	const dim3 gridDim((m + blockDim.x - 1) / blockDim.x,
+					   (p + blockDim.y - 1) / blockDim.y);
+
+	// Launch kernel (<<<grid, block>>>)
+	mm_kernel<T><<<gridDim, blockDim>>>(mat_1, mat_2, mat_3, m, n, p);
+}
+
 // Macro wrapper: converts the CUDA call `val` into a string (#val)
 // and passes it with file and line info to `check`
 #define checkCuda(val) check((val), #val, __FILE__, __LINE__)
@@ -19,13 +43,13 @@ void check(cudaError_t err,
 // Random Initialization
 // Create a vector filled with random numbers in [-256, 256]
 template <typename T>
-std::vector<T> create_rand_vector(size_t n) {
+std::vector<T> create_rand_vector(size_t n, T min_val = -256, T max_val = 256) {
 	std::random_device r;				// Non-deterministic seed
 	std::default_random_engine e(r());	// Random engine
-	std::uniform_int_distribution<int> uniform_dist(-256, 256);
+	std::uniform_real_distribution<double> uniform_dist(min_val, max_val);
 	std::vector<T> vec(n);
 	for (size_t i = 0; i < n; ++i) {
-		vec.at(i) = static_cast<T>(uniform_dist(e));  // Fill each element
+		vec[i] = static_cast<T>(uniform_dist(e));  // Fill each element
 	}
 	return vec;
 }
@@ -159,3 +183,5 @@ float measure_latency_mm_cuda(size_t m,
 	// Return average runtime per test (milliseconds)
 	return time / num_tests;
 }
+
+#endif
